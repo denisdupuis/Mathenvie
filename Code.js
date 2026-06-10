@@ -5,13 +5,19 @@ const NomEleve = document.getElementById("NomEleve");
 var NB = 0;
 
 var TabEleves = "Eleves.json";
-var TabProblemes = [];
+var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];;
+
+function SaveTableau() {
+    var TableauSauvegarde = JSON.stringify(TabProblemes);
+    localStorage.setItem("Mathenvie", TableauSauvegarde);
+}
+
 
 function AfficherGrille(NB) {
     NomEleve.textContent = document.getElementById(NB).textContent;
     NomEleve.style.fontWeight = "bold";
     NomEleve.style.fontSize = "3rem";
-    Grille.replaceChildren();
+    Grille.replaceChildren();    
 
     for (var i=1; i<61; i++) {            // Création de la grille
             var Probleme = document.createElement('div');
@@ -39,19 +45,16 @@ function AfficherGrille(NB) {
                     evt.target.style.backgroundColor = "white";
                     TabProblemes[NB][ID] = 0;
                   }
+                SaveTableau();
             })
             Grille.appendChild(Probleme);
         }
-
-    /*for(var i=0; i<60; i++) {
-        var Probleme = document.createElement('div');
-
-    }*/
 }
 
 
 function Init() {
     var NB = 0;
+    console.log(TabProblemes);
     fetch(TabEleves)
     .then(reponse => {
         if (reponse.ok) {
@@ -85,12 +88,14 @@ function Init() {
         NB = NB+1;
         })
         
-        for (var i=0; i<NB; i++) {             // A départ, aucun problème n'est résolu
-            TabProblemes[i] = [];
-            for (var j=0; j<60; j++) {
-                TabProblemes[i][j] = 0
-            }
-        }
+        if (TabProblemes == []) {
+          for (var i=0; i<NB; i++) {             // Au départ, aucun problème n'est résolu
+              TabProblemes[i] = [];
+              for (var j=0; j<60; j++) {
+                  TabProblemes[i][j] = 0
+              }
+          }
+        }  
     })
 }
 
