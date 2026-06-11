@@ -5,7 +5,7 @@ const NomEleve = document.getElementById("NomEleve");
 var NB = 0;
 
 var TabEleves = "Eleves.json";
-var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];;
+var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];
 
 function SaveTableau() {
     var TableauSauvegarde = JSON.stringify(TabProblemes);
