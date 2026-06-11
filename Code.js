@@ -5,7 +5,7 @@ const NomEleve = document.getElementById("NomEleve");
 var NB = 0;
 
 var TabEleves = "Eleves.json";
-var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];;
+var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];
 
 function SaveTableau() {
     var TableauSauvegarde = JSON.stringify(TabProblemes);
@@ -20,41 +20,40 @@ function AfficherGrille(NB) {
     Grille.replaceChildren();    
 
     for (var i=1; i<61; i++) {            // Création de la grille
-            var Probleme = document.createElement('div');
-            Probleme.id = "P"+i;
-            Probleme.style.fontSize = "2rem";
-            Probleme.style.width = "50px";
-            Probleme.style.height = "50px";
-            Probleme.style.border = "solid";
-            Probleme.style.display = "flex";
-            Probleme.style.justifyContent = "center";
-            Probleme.style.alignItems = "center";
-            Probleme.style.cursor = "pointer";
-            Probleme.textContent = i;
-            if (TabProblemes[NB][i] == 1) {
-                Probleme.style.backgroundColor = "green";
-            } else Probleme.style.backgroundColor = "white";
+        var Probleme = document.createElement('div');
+        Probleme.id = "P"+i;
+        Probleme.style.fontSize = "2rem";
+        Probleme.style.width = "50px";
+        Probleme.style.height = "50px";
+        Probleme.style.border = "solid";
+        Probleme.style.display = "flex";
+        Probleme.style.justifyContent = "center";
+        Probleme.style.alignItems = "center";
+        Probleme.style.cursor = "pointer";
+        Probleme.textContent = i;
+        if (TabProblemes[NB][i] == 1) {
+            Probleme.style.backgroundColor = "green";
+        } else Probleme.style.backgroundColor = "white";
 
-            Probleme.addEventListener("mousedown", function(evt) {
-                var ID = evt.target.id;
-                ID = ID.replace("P","");
-                if (evt.target.style.backgroundColor != "green") {
-                  evt.target.style.backgroundColor = "green";
-                  TabProblemes[NB][ID] = 1;
-                  } else {
-                    evt.target.style.backgroundColor = "white";
-                    TabProblemes[NB][ID] = 0;
-                  }
-                SaveTableau();
-            })
-            Grille.appendChild(Probleme);
-        }
+        Probleme.addEventListener("mousedown", function(evt) {
+            var ID = evt.target.id;
+            ID = ID.replace("P","");
+            if (evt.target.style.backgroundColor != "green") {
+              evt.target.style.backgroundColor = "green";
+              TabProblemes[NB][ID] = 1;
+              } else {
+                evt.target.style.backgroundColor = "white";
+                TabProblemes[NB][ID] = 0;
+              }
+            SaveTableau();
+         })
+         Grille.appendChild(Probleme);
+    }
 }
 
 
 function Init() {
     var NB = 0;
-    console.log(TabProblemes);
     fetch(TabEleves)
     .then(reponse => {
         if (reponse.ok) {
@@ -88,14 +87,15 @@ function Init() {
         NB = NB+1;
         })
         
-        if (TabProblemes == []) {
-          for (var i=0; i<NB; i++) {             // Au départ, aucun problème n'est résolu
-              TabProblemes[i] = [];
-              for (var j=0; j<60; j++) {
-                  TabProblemes[i][j] = 0
-              }
-          }
-        }  
+        if (TabProblemes.length === 0) {
+          for (var i=0; i<NB; i++) {        // Au départ, aucun problème n'est résolu
+            TabProblemes[i] = [];
+            for (var j=0; j<60; j++) {
+                TabProblemes[i][j] = 0
+               }
+            }
+        }
+          
     })
 }
 
