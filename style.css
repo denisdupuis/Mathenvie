@@ -10,6 +10,10 @@ body {
     height: 100%
 }
 
+#Resolus {
+    font-size: 2rem;
+}
+
 #Grille {
     display: grid;
     grid-template-columns: repeat(10, 1fr);

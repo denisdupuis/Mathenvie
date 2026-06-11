@@ -2,10 +2,18 @@ const Gauche = document.getElementById("Gauche");
 const Droite = document.getElementById("Droite");
 const Grille = document.getElementById("Grille");
 const NomEleve = document.getElementById("NomEleve");
+const Resolus = document.getElementById("Resolus");
 var NB = 0;
 
 var TabEleves = "Eleves.json";
 var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];
+var TabResolus = JSON.parse(localStorage.getItem("Resolus")) || [];
+
+
+function SaveScore() {
+    var TableauScore = JSON.stringify(TabResolus);
+    localStorage.setItem("Resolus", TableauScore);
+}
 
 function SaveTableau() {
     var TableauSauvegarde = JSON.stringify(TabProblemes);
@@ -17,8 +25,9 @@ function AfficherGrille(NB) {
     NomEleve.textContent = document.getElementById(NB).textContent;
     NomEleve.style.fontWeight = "bold";
     NomEleve.style.fontSize = "3rem";
-    Grille.replaceChildren();    
-
+    Grille.replaceChildren();  
+        
+    
     for (var i=1; i<61; i++) {            // Création de la grille
         var Probleme = document.createElement('div');
         Probleme.id = "P"+i;
@@ -33,7 +42,11 @@ function AfficherGrille(NB) {
         Probleme.textContent = i;
         if (TabProblemes[NB][i] == 1) {
             Probleme.style.backgroundColor = "green";
-        } else Probleme.style.backgroundColor = "white";
+           } else Probleme.style.backgroundColor = "white";
+
+         if (TabResolus[NB]==0||TabResolus[NB]==1) {
+            Resolus.textContent = TabResolus[NB]+" Problème résolu";
+            } else Resolus.textContent = TabResolus[NB] + " Problèmes résolus";
 
         Probleme.addEventListener("mousedown", function(evt) {
             var ID = evt.target.id;
@@ -41,12 +54,19 @@ function AfficherGrille(NB) {
             if (evt.target.style.backgroundColor != "green") {
               evt.target.style.backgroundColor = "green";
               TabProblemes[NB][ID] = 1;
+              TabResolus[NB] = TabResolus[NB]+1;
               } else {
                 evt.target.style.backgroundColor = "white";
                 TabProblemes[NB][ID] = 0;
+                TabResolus[NB] = TabResolus[NB]-1;
               }
+            if (TabResolus[NB]==0||TabResolus[NB]==1) {
+            Resolus.textContent = TabResolus[NB]+" Problème résolu";
+              } else Resolus.textContent = TabResolus[NB] + " Problèmes résolus";
+            SaveScore();  
             SaveTableau();
          })
+         
          Grille.appendChild(Probleme);
     }
 }
@@ -95,8 +115,15 @@ function Init() {
                }
             }
         }
+
+        if (TabResolus.length === 0) {
+            for (var i=0; i<NB; i++) {
+                TabResolus[i] = 0;
+            }
+        }
           
     })
 }
 
 Init();
+console.log(TabResolus);
