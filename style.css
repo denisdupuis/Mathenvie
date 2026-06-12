@@ -10,8 +10,12 @@ body {
     height: 100%
 }
 
-#Resolus {
+#Resolus, #Gagnant {
     font-size: 2rem;
+}
+
+#Gagnat {
+    text-shadow: 0cap;
 }
 
 #Grille {

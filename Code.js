@@ -3,11 +3,13 @@ const Droite = document.getElementById("Droite");
 const Grille = document.getElementById("Grille");
 const NomEleve = document.getElementById("NomEleve");
 const Resolus = document.getElementById("Resolus");
+const Gagnant = document.getElementById("Gagnant");
 var NB = 0;
 
 var TabEleves = "Eleves.json";
 var TabProblemes = JSON.parse(localStorage.getItem("Mathenvie")) || [];
 var TabResolus = JSON.parse(localStorage.getItem("Resolus")) || [];
+var Vainqueur = localStorage.getItem("Gagnant") || "";
 
 
 function SaveScore() {
@@ -18,6 +20,20 @@ function SaveScore() {
 function SaveTableau() {
     var TableauSauvegarde = JSON.stringify(TabProblemes);
     localStorage.setItem("Mathenvie", TableauSauvegarde);
+}
+
+function SaveGagnant() {
+    var Max=0;
+    for (var i=0; i<TabResolus.length; i++) {
+        if (TabResolus[i]>TabResolus[Max]) Max = i;
+    }
+    fetch(TabEleves)
+        .then(response=>response.json())
+        .then (data => {
+            Vainqueur = data[Max].NOM;
+                Gagnant.textContent = "Gagnant : "+Vainqueur;
+        })
+    localStorage.setItem("Gagnant", Vainqueur);
 }
 
 
@@ -65,6 +81,7 @@ function AfficherGrille(NB) {
               } else Resolus.textContent = TabResolus[NB] + " Problèmes résolus";
             SaveScore();  
             SaveTableau();
+            SaveGagnant();
          })
          
          Grille.appendChild(Probleme);
@@ -106,6 +123,8 @@ function Init() {
         Gauche.appendChild(Element);
         NB = NB+1;
         })
+
+        Gagnant.textContent = Vainqueur;
         
         if (TabProblemes.length === 0) {
           for (var i=0; i<NB; i++) {        // Au départ, aucun problème n'est résolu
@@ -116,7 +135,7 @@ function Init() {
             }
         }
 
-        if (TabResolus.length === 0) {
+        if (TabResolus.length === 0) {  // Au départ, Nombre de problème résolu est 0 !
             for (var i=0; i<NB; i++) {
                 TabResolus[i] = 0;
             }
@@ -126,4 +145,3 @@ function Init() {
 }
 
 Init();
-console.log(TabResolus);
